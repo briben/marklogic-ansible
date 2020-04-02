@@ -1,0 +1,17 @@
+- name: Check installed MarkLogic version
+  command: 
+    cmd: 'rpm -qa MarkLogic --queryformat %{VERSION}'
+    warn: no
+  register: version
+  changed_when: False
+
+- name: Output MarkLogic version
+  debug:
+    var: version.stdout
+
+- name: Stop playbook for host if MarkLogic is installed
+  meta: end_host
+  when: version is defined
+
+- name: Ping
+  ping: 
